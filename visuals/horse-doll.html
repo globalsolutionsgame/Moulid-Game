@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Horse & Doll — visuals (Mawlid 9)</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#faf6ef;color:#31261D;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+    .card{background:#fff;border-radius:14px;padding:20px;max-width:720px;width:95%;box-shadow:0 12px 40px rgba(49,38,29,0.08);text-align:center}
+    img{max-width:100%;height:auto;display:inline-block;margin:12px}
+    .note{color:#6b5a45;margin-top:8px}
+    textarea{width:100%;height:80px;margin-top:8px}
+    .actions{display:flex;gap:10px;justify-content:center;margin-top:12px}
+    button{background:#31261D;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .qr{margin-top:14px}
+    iframe{display:none}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Horse & Doll visuals (mawlid_personality 9)</h2>
+    <p class="note">This page extracts the horse + doll images embedded in <code>mawlid_personality 9.html</code> and shows a QR code linking to that quiz. Works best when served via GitHub Pages for same-origin access. If automatic extraction fails, use the manual paste area below.</p>
+
+    <div id="gallery">Loading images…</div>
+
+    <div id="qrArea" class="qr" style="display:none">
+      <p class="note">QR code to open the quiz:</p>
+      <img id="qrImg" alt="QR code to quiz" width="240" height="240">
+      <div style="margin-top:8px"><a id="qrDownload" download="mawlid-quiz-qr.png">Download QR</a></div>
+    </div>
+
+    <div id="manual" style="display:none; margin-top:12px; text-align:left;">
+      <p class="note">Automatic load failed. Paste the two <code>data:image/png;base64,...</code> image strings below (one per line), then click Show.</p>
+      <textarea id="paste"></textarea>
+      <div class="actions"><button id="showBtn">Show</button><button id="clearBtn">Clear</button></div>
+    </div>
+
+    <p class="note">Pages URL (if enabled):<br><strong>https://Sarahzidan99.github.io/Moulid-Game/mawlid_personality%209.html</strong></p>
+  </div>
+
+  <iframe id="srcFrame" src="/mawlid_personality%209.html"></iframe>
+
+  <script>
+    const gallery = document.getElementById('gallery');
+    const manual = document.getElementById('manual');
+    const frame = document.getElementById('srcFrame');
+    const qrArea = document.getElementById('qrArea');
+    const qrImg = document.getElementById('qrImg');
+    const qrDownload = document.getElementById('qrDownload');
+
+    const pagesURL = 'https://Sarahzidan99.github.io/Moulid-Game/mawlid_personality%209.html';
+    const qrService = (u) => 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=' + encodeURIComponent(u) + '&choe=UTF-8';
+
+    function showImages(horseSrc, dollSrc){
+      gallery.innerHTML = '';
+      const img1 = document.createElement('img'); img1.src = horseSrc; img1.alt = 'Horse'; img1.style.maxWidth = '48%';
+      const img2 = document.createElement('img'); img2.src = dollSrc; img2.alt = 'Doll'; img2.style.maxWidth = '48%';
+      gallery.appendChild(img1); gallery.appendChild(img2);
+
+      qrImg.src = qrService(pagesURL);
+      qrDownload.href = qrImg.src;
+      qrArea.style.display = 'block';
+    }
+
+    function showManual(){
+      gallery.innerHTML = '<div style="color:#a0896f">Could not auto-load images. Use the manual paste area below.</div>';
+      manual.style.display = 'block';
+      qrImg.src = qrService(pagesURL);
+      qrDownload.href = qrImg.src;
+      qrArea.style.display = 'block';
+    }
+
+    function tryIframe() {
+      try {
+        frame.addEventListener('load', () => {
+          try {
+            const doc = frame.contentDocument || frame.contentWindow.document;
+            if (!doc) { showManual(); return; }
+            const imgs = doc.querySelectorAll('img[src^="data:image/png;base64,"]');
+            if (imgs && imgs.length >= 2) {
+              const horse = imgs[0].getAttribute('src');
+              const doll = imgs[1].getAttribute('src');
+              showImages(horse, doll);
+            } else {
+              const html = doc.documentElement.innerHTML;
+              const rx = /src\s*=\s*\"(data:image\/png;base64,[^\"]+)\"/g;
+              const matches = [];
+              let m; while ((m = rx.exec(html)) !== null) matches.push(m[1]);
+              if (matches.length >= 2) showImages(matches[0], matches[1]);
+              else showManual();
+            }
+          } catch (err) {
+            console.warn('iframe load error', err);
+            showManual();
+          }
+        });
+        setTimeout(() => {
+          try {
+            const doc = frame.contentDocument || frame.contentWindow && frame.contentWindow.document;
+            if (doc) {
+              const imgs = doc.querySelectorAll('img[src^="data:image/png;base64,"]');
+              if (imgs && imgs.length >= 2) {
+                showImages(imgs[0].getAttribute('src'), imgs[1].getAttribute('src'));
+              }
+            }
+          } catch(e){}
+        }, 300);
+      } catch(e){ showManual(); }
+    }
+
+    async function tryFetchEmbedded(){
+      try{
+        const resp = await fetch('./mawlid_personality%209.html');
+        if(!resp.ok) throw new Error('HTTP ' + resp.status);
+        const txt = await resp.text();
+        const rx = /src\s*=\s*\"(data:image\/png;base64,[^\"]+)\"/g;
+        const matches = [];
+        let m;
+        while((m = rx.exec(txt)) !== null) matches.push(m[1]);
+        if(matches.length >= 2){
+          showImages(matches[0], matches[1]);
+          return true;
+        } else {
+          showManual();
+          return false;
+        }
+      }catch(err){
+        console.warn('fetch failed', err);
+        showManual();
+        return false;
+      }
+    }
+
+    document.getElementById('showBtn').onclick = ()=>{
+      const txt = document.getElementById('paste').value.trim();
+      if(!txt){ alert('Paste the two data URIs (one per line)'); return; }
+      const lines = txt.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+      if(lines.length < 2){ alert('Please paste at least two data URIs (horse then doll)'); return; }
+      showImages(lines[0], lines[1]);
+    };
+    document.getElementById('clearBtn').onclick = ()=>{ document.getElementById('paste').value=''; };
+
+    (async ()=>{
+      tryIframe();
+      setTimeout(async ()=>{
+        if (gallery.innerText.includes('Loading')) {
+          await tryFetchEmbedded();
+        }
+      }, 700);
+    })();
+  </script>
+</body>
+</html>
