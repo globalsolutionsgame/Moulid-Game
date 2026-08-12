@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Mawlid Sweet Are You?</title>
+<style>
+  :root {
+    --maf-brown: #31261D;
+    --maf-sand: #C2A878;
+    --maf-sand-light: #E5D3B3;
+    --maf-white: #FFFFFF;
+    --maf-cream: #FAF6EF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, var(--maf-cream) 0%, var(--maf-sand-light) 50%, var(--maf-sand) 100%);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 20px; color: var(--maf-brown);
+  }
+  .container {
+    background: var(--maf-white); border-radius: 25px; padding: 30px 25px;
+    max-width: 500px; width: 100%; box-shadow: 0 20px 60px rgba(49,38,29,0.25);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .container::before {
+    content: ''; position: absolute; top:0; left:0; right:0; height:8px;
+    background: linear-gradient(90deg, var(--maf-brown), var(--maf-sand), var(--maf-brown));
+  }
+  h1 { color: var(--maf-brown); font-size: 1.8em; margin-bottom: 8px; margin-top: 10px; }
+  .subtitle { color: #7a6d5f; margin-bottom: 15px; font-size: 0.95em; }
+  .hero-img { display:block; margin: 8px auto 15px; max-width: 220px; width: 68%; height:auto; }
+  .hero-img-quiz { display:block; margin: 20px auto 0; max-width: 190px; width: 58%; height:auto; }
+  input[type="text"] {
+    width:100%; padding:15px; border:2px solid var(--maf-sand); border-radius:15px;
+    font-size:1em; margin:15px 0; outline:none; text-align:center;
+    color: var(--maf-brown); background: var(--maf-cream);
+  }
+  input[type="text"]:focus { border-color: var(--maf-brown); background: var(--maf-white); }
+  button {
+    background: linear-gradient(135deg, var(--maf-brown), #4a3a2c); color: var(--maf-white);
+    border:none; padding:14px 30px; font-size:1em; font-weight:bold; border-radius:25px;
+    cursor:pointer; margin:8px 5px; box-shadow:0 6px 20px rgba(49,38,29,0.35);
+    transition: transform 0.2s; width:100%; max-width:300px; letter-spacing:0.3px;
+  }
+  button:hover { transform: translateY(-2px); }
+  button.secondary { background: var(--maf-white); color: var(--maf-brown); border:2px solid var(--maf-brown); }
+  .answer-btn {
+    display:block; width:100%; background: var(--maf-white); color: var(--maf-brown);
+    border:2px solid var(--maf-sand); padding:15px; margin:10px 0; border-radius:15px;
+    font-size:1em; cursor:pointer; text-align:left;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    font-weight:500; -webkit-tap-highlight-color: transparent;
+  }
+  @media (hover: hover) {
+    .answer-btn:hover {
+      background: var(--maf-white); color: var(--maf-brown); border-color: var(--maf-brown);
+      box-shadow: 0 4px 12px rgba(49,38,29,0.15); transform: translateX(4px);
+    }
+  }
+  .answer-btn:focus { outline:none; background: var(--maf-white); }
+  .progress { background: var(--maf-sand-light); border-radius:20px; height:10px; margin:15px 0 25px; overflow:hidden; }
+  .progress-bar { background: linear-gradient(90deg, var(--maf-brown), var(--maf-sand)); height:100%; transition: width 0.4s; }
+  .question { font-size:1.15em; margin:20px 0; font-weight:600; color: var(--maf-brown); line-height:1.4; }
+  .result-card {
+    background: linear-gradient(135deg, var(--maf-cream), var(--maf-sand-light));
+    border-radius:20px; padding:25px 20px; margin:20px 0; border:3px dashed var(--maf-brown);
+  }
+  .emoji-big { font-size:4em; margin:10px 0; display:block; }
+  .sweet-name { font-size:1.6em; color: var(--maf-brown); font-weight:bold; margin:10px 0; }
+  .sweet-tagline { font-style:italic; color:#6b5a45; font-size:1em; margin:8px 0; font-weight:600; }
+  .sweet-caption { background: var(--maf-white); padding:15px; border-radius:12px; margin:15px 0; font-size:1em; line-height:1.5; color: var(--maf-brown); }
+  .screenshot-callout {
+    background: linear-gradient(135deg, #fff8ec, var(--maf-sand-light));
+    border:2px dashed var(--maf-brown); border-radius:15px; padding:16px 18px; margin:18px 0 10px;
+    color: var(--maf-brown); font-size:1em; line-height:1.5; font-weight:600;
+  }
+  .screenshot-callout .big { font-size:1.15em; display:block; margin-bottom:6px; }
+  .maf-caption {
+    background: linear-gradient(135deg, var(--maf-brown), #4a3a2c); color: var(--maf-white);
+    padding:15px; border-radius:15px; margin:18px 0 10px; font-weight:bold; font-size:1.05em;
+    line-height:1.4; letter-spacing:0.3px;
+  }
+  .hashtags { color: var(--maf-brown); font-weight:600; font-size:0.9em; margin:10px 0; }
+  .linkedin-btn { background:#0077b5; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+  .hidden { display:none; }
+  .footer-note { margin-top:15px; font-size:0.8em; color:#a89880; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- SCREEN 1: WELCOME -->
+  <div id="screen-welcome">
+    <h1>Which Mawlid Sweet Are You?</h1>
+    <p class="subtitle">A sweet little personality quiz<br>Let's find your inner halawa!</p>
+    <img class="hero-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbgAAAJDCAYAAAB5dwH0AAEAAElEQVR42uyddZxc1fn/3+dcGZ9Z97gRheABAgT3Ik2gSIEK8C2lRgvUCOm33xqlFKjBr0UKpTQpxaWFQoIH4sQ9u8m6zY5[...]">
+    <input type="text" id="playerName" placeholder="What's your name?" maxlength="30">
+    <button onclick="startQuiz()">Let's Go!</button>
+    <p class="footer-note">Takes ~1 minute • 100% for fun</p>
+  </div>
+
+  <!-- SCREEN 2: QUIZ -->
+  <div id="screen-quiz" class="hidden">
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <p style="color:#8a7a65; font-size:0.9em;" id="qCounter">Question 1 of 6</p>
+    <p class="question" id="questionText"></p>
+    <div id="answersContainer"></div>
+    <img class="hero-img-quiz" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAggAAAIXCAYAAAD5fKYtAAEAAElEQVR42uy9d5hdV3m+fa+1y6nTe5E0o97lIsm2bNmSe29gUQOYAA4l9JIQiFCS3xcIGAKYBOOA6UW2cS+4yVXdV[...]">
+  </div>
+
+  <!-- SCREEN 3: RESULT -->
+  <div id="screen-result" class="hidden">
+    <p style="color:#8a7a65; font-size:0.95em;" id="resultGreeting"></p>
+    <p style="color:var(--maf-brown); font-size:1em; margin:5px 0;">You are...</p>
+    <div class="result-card">
+      <span class="emoji-big" id="sweetEmoji">🍬</span>
+      <div class="sweet-name" id="sweetName"></div>
+      <div class="sweet-tagline" id="sweetTagline"></div>
+      <div class="sweet-caption" id="sweetCaption"></div>
+    </div>
+    <div class="screenshot-callout">
+      <span class="big">📸 Screenshot this screen!</span>
+      Then post &amp; share your Mawlid sweet on LinkedIn to join the fun and be part of the celebration! 🎉
+    </div>
+    <button onclick="shareOnLinkedIn()" class="linkedin-btn">📸 Share on LinkedIn</button>
+    <div class="maf-caption">💫 Bringing togetherness by creating great moments 💫</div>
+    <div class="hashtags">#GlobalSolutions #MawlidVibes #GreatMoments</div>
+    <button onclick="restart()" class="secondary">Play Again</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  { q: "It's Friday night. What's the vibe?", answers: [
+      { text: "Group hang — the more the merrier!", tags: ["social","warm"] },
+      { text: "Cozy at home with snacks & a series", tags: ["chill","sweet"] },
+      { text: "Trying something new & spontaneous", tags: ["bold","fun"] },
+      { text: "Reading, planning, or organizing my life", tags: ["classy","deep"] } ] },
+  { q: "Pick your ideal weekend energy", answers: [
+      { text: "Sunshine, beach, loud laughs", tags: ["warm","bold"] },
+      { text: "Café hopping & aesthetic photos", tags: ["classy","sweet"] },
+      { text: "Adventure park or road trip", tags: ["fun","bold"] },
+      { text: "Yoga, journaling, self-care day", tags: ["deep","chill"] } ] },
+  { q: "Your friend group would describe you as...", answers: [
+      { text: "The comedian — always cracking jokes", tags: ["fun","warm"] },
+      { text: "The soft heart — emotional support bestie", tags: ["sweet","chill"] },
+      { text: "The main character energy", tags: ["bold","classy"] },
+      { text: "The wise one — everyone comes for advice", tags: ["deep","classy"] } ] },
+  { q: "What's your comfort food emergency?", answers: [
+      { text: "Anything chocolate, obviously", tags: ["sweet","warm"] },
+      { text: "Spicy street food, no regrets", tags: ["bold","fun"] },
+      { text: "A fancy dessert with a fork", tags: ["classy","deep"] },
+      { text: "Popcorn straight from the bag", tags: ["chill","fun"] } ] },
+  { q: "How do you handle Monday mornings?", answers: [
+      { text: "Already crushed 3 tasks before 9am", tags: ["bold","classy"] },
+      { text: "Coffee first, humanity second", tags: ["chill","deep"] },
+      { text: "Blasting music, dancing to the office", tags: ["fun","warm"] },
+      { text: "Checking on everyone's weekend", tags: ["sweet","warm"] } ] },
+  { q: "Your dream vacation is...", answers: [
+      { text: "Tropical island, zero emails", tags: ["chill","sweet"] },
+      { text: "Paris — art, cafés, elegance", tags: ["classy","deep"] },
+      { text: "Tokyo — neon lights & chaos", tags: ["fun","bold"] },
+      { text: "Safari, hiking, real adventure", tags: ["bold","warm"] } ] }
+];
+
+const sweets = {
+  arousa: { emoji: "👰✨", name: "El Arousa (The Sugar Doll)", tagline: "The Iconic Main Character", caption: "You're that girl/guy — dressed up, put together, and impossible to ignore. Peop[...]" },
+  hosan: { emoji: "🐴🔥", name: "El Hosan (The Sugar Horse)", tagline: "The Unstoppable Powerhouse", caption: "You gallop into every room with main character energy. Ambitious, driven, and sl[...]" },
+  simsimeya: { emoji: "🌟", name: "Simsimeya (Sesame Brittle)", tagline: "The Understated Icon", caption: "Simple on the outside, absolute crunch on the inside. You don't need to be loud — yo[...]" },
+  foulia: { emoji: "🥜💛", name: "Foulia (Peanut Brittle)", tagline: "The Warm Group Favorite", caption: "You're everyone's comfort person. Reliable, warm, and always down for a chat. You bri[...]" },
+  malban: { emoji: "🌸", name: "Malban (Turkish Delight)", tagline: "The Soft Aesthetic Queen", caption: "Soft-spoken but make it iconic. You're all pastel vibes, cute cafés, and thoughtful ca[...]" },
+  homsiya: { emoji: "✨🧠", name: "Homsiya (Chickpea Brittle)", tagline: "The Deep Thinker", caption: "You're the one texting 'do you ever think about...' at 2am. Layered, thoughtful, and slig[...]" },
+  ladida: { emoji: "🍭👑", name: "Ladida (Layered Sugar Sweet)", tagline: "The Luxury Bestie", caption: "Layered, refined, and impossible to replicate. Expensive taste, elevated vibes, and st[...]" },
+  shakalama: { emoji: "🎨🎊", name: "Shakalama (Colorful Sugar Mix)", tagline: "The Chaotic Good Icon", caption: "You walked into the office group chat and it went from dead to trending. A wh[...]" },
+  louzeya: { emoji: "🌰✨", name: "Louzeya (Almond Delight)", tagline: "The Trendy Soft Girl/Boy", caption: "You're that person on everyone's 'For You' page energy. Effortlessly trendy, low-ke[...]" },
+  bondoqya: { emoji: "🌰✨", name: "Bondoqya (Hazelnut Sweet)", tagline: "The Effortlessly Cool One", caption: "You're that person who walks in like they own the place — no effort, all vibe.[...]" },
+};
+
+let currentQ = 0, playerName = "", tagScores = {};
+
+function startQuiz() {
+  const name = document.getElementById('playerName').value.trim();
+  if (!name) { alert("Don't be shy — tell us your name first!"); return; }
+  playerName = name; currentQ = 0;
+  tagScores = { social:0, warm:0, chill:0, sweet:0, bold:0, fun:0, classy:0, deep:0 };
+  document.getElementById('screen-welcome').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('questionText').innerText = q.q;
+  document.getElementById('qCounter').innerText = "Question " + (currentQ + 1) + " of " + questions.length;
+  document.getElementById('progressBar').style.width = ((currentQ)/questions.length)*100 + "%";
+  const c = document.getElementById('answersContainer'); c.innerHTML = '';
+  q.answers.forEach(function(a) {
+    const b = document.createElement('button'); b.className = 'answer-btn';
+    b.innerText = a.text; b.onclick = function(){ selectAnswer(a.tags); }; c.appendChild(b);
+  });
+}
+function selectAnswer(tags) {
+  tags.forEach(function(t){ tagScores[t] = (tagScores[t]||0)+1; });
+  currentQ++;
+  if (currentQ < questions.length) renderQuestion(); else showResult();
+}
+function showResult() {
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+  let best=null, bs=-1;
+  Object.entries(sweets).forEach(function(e){ const s=e[1]; const sc=s.tags.reduce(function(a,t){return a+(tagScores[t]||0);},0); if(sc>bs){bs=sc;best=s;} });
+  document.getElementById('resultGreeting').innerText = "Hey " + playerName + "!";
+  document.getElementById('sweetEmoji').innerText = best.emoji;
+  document.getElementById('sweetName').innerText = best.name;
+  document.getElementById('sweetTagline').innerText = best.tagline;
+  document.getElementById('sweetCaption').innerText = best.caption;
+}
+function shareOnLinkedIn() {
+  const text = encodeURIComponent(
+    "I just found out I'm " + document.getElementById('sweetName').innerText + " 🍬✨\n\n" +
+    document.getElementById('sweetTagline').innerText + "\n\n" +
+    "💫 Bringing togetherness by creating great moments 💫\n\n" +
+    "#GlobalSolutions #MawlidVibes #GreatMoments"
+  );
+  window.open("https://www.linkedin.com/feed/?shareActive=true&text=" + text, '_blank');
+}
+function restart() {
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-welcome').classList.remove('hidden');
+  document.getElementById('playerName').value = '';
+}
+</script>
+
+</body>
+</html>
